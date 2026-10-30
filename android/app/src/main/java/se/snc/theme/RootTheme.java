@@ -52,8 +52,9 @@ public final class RootTheme {
                         + "\"android.theme.customization.color_index\":\"-1\","
                         + "\"_applied_timestamp\":" + System.currentTimeMillis() + "}";
                 su("settings put secure " + KEY + " '" + json + "'");
+                String clock = clockGold(p);
                 String overlays = navy ? navySurfaces(a, true) : navySurfaces(a, false);
-                result = su("settings get secure " + KEY).trim() + "\n\n" + overlays;
+                result = su("settings get secure " + KEY).trim() + "\n\nClock: " + clock + "\n\n" + overlays;
                 ok = result.contains(GOLD);
             } catch (Exception e) {
                 result = e.getClass().getSimpleName() + ": " + e.getMessage();
@@ -76,6 +77,12 @@ public final class RootTheme {
                 }
                 p.edit().remove("original").apply();
                 navySurfaces(a, false);
+                String oc = p.getString("original_clock", null);
+                if (oc != null) {
+                    if (oc.isEmpty() || "null".equals(oc)) su("settings delete secure " + CLOCK_KEY);
+                    else su("settings put secure " + CLOCK_KEY + " '" + oc + "'");
+                    p.edit().remove("original_clock").apply();
+                }
                 result = su("settings get secure " + KEY).trim();
             } catch (Exception e) {
                 result = e.getClass().getSimpleName() + ": " + e.getMessage();
@@ -84,6 +91,65 @@ public final class RootTheme {
         }).start();
     }
 
+
+
+    private static final String CLOCK_KEY = "lock_screen_custom_clock_face";
+
+    /** Sätter låsskärmsklockans färg till SNC-guld. Returnerar den nya inställningen. */
+    private static String clockGold(SharedPreferences p) throws Exception {
+        String cur = su("settings get secure " + CLOCK_KEY).trim();
+        if (!p.contains("original_clock")) p.edit().putString("original_clock", cur).apply();
+        org.json.JSONObject o;
+        try {
+            o = new org.json.JSONObject(cur);
+        } catch (Exception e) {
+            o = new org.json.JSONObject();
+        }
+        if (!o.has("clockId")) o.put("clockId", "DEFAULT");
+        o.put("seedColor", 0xFFDDAE54);
+        org.json.JSONObject meta = o.optJSONObject("metadata");
+        if (meta == null) meta = new org.json.JSONObject();
+        meta.put("appliedTimestamp", System.currentTimeMillis());
+        o.put("metadata", meta);
+        su("settings put secure " + CLOCK_KEY + " '" + o.toString() + "'");
+        return su("settings get secure " + CLOCK_KEY).trim();
+    }
+
+    /** Samlar uppgifter om klocka, typsnitt och färger i Download/snc-diagnostik.txt. */
+    public static void diagnostics(Activity a) {
+        new Thread(() -> {
+            String out;
+            try {
+                String sh = "OUT=/sdcard/Download/snc-diagnostik.txt\n"
+                        + "{\n"
+                        + "echo \"== SNC diagnostik $(date) ==\"\n"
+                        + "getprop ro.lineage.build.version; getprop ro.build.version.release; getprop ro.product.model\n"
+                        + "echo '== clock setting =='; settings get secure " + CLOCK_KEY + "\n"
+                        + "echo '== theme =='; settings get secure " + KEY + "\n"
+                        + "echo '== secure clock/font =='; settings list secure | grep -i -E 'clock|font'\n"
+                        + "echo '== system clock/font =='; settings list system | grep -i -E 'clock|font'\n"
+                        + "echo '== font overlays =='; cmd overlay list | grep -i -E 'font|clock'\n"
+                        + "echo '== fonts.xml families =='\n"
+                        + "for f in /system/etc/font_fallback.xml /system/etc/fonts.xml /product/etc/fonts_customization.xml; do [ -f $f ] && { echo \"-- $f\"; grep -o 'family[^>]*name=\"[^\"]*\"' $f | sort -u; }; done\n"
+                        + "echo '== clock-ish fonts on disk =='; ls -la /system/fonts /product/fonts /system_ext/fonts 2>/dev/null | grep -i -E 'clock|flex|sans|lineage|rubik'\n"
+                        + "echo '== fonts referenced with clock =='; grep -i -B2 -A6 'clock' /system/etc/fonts.xml /product/etc/fonts_customization.xml 2>/dev/null | head -80\n"
+                        + "echo '== systemui =='; pm path com.android.systemui\n"
+                        + "echo '== clock registry =='; dumpsys activity service com.android.systemui/.SystemUIService 2>/dev/null | grep -i -E 'clockId|ClockRegistry|currentClock|clock_face' | head -40\n"
+                        + "} > $OUT 2>&1\n"
+                        + "echo saved\n";
+                java.io.File f = new java.io.File(a.getCacheDir(), "snc_diag.sh");
+                try (java.io.FileOutputStream o = new java.io.FileOutputStream(f)) {
+                    o.write(sh.getBytes("UTF-8"));
+                }
+                f.setReadable(true, false);
+                su("sh " + f.getAbsolutePath());
+                out = "Download/snc-diagnostik.txt";
+            } catch (Exception e) {
+                out = e.getClass().getSimpleName() + ": " + e.getMessage();
+            }
+            show(a, R.string.diag_done, out);
+        }).start();
+    }
 
     /** Marinblå neutrala toner och mörka ytor (beräknade från #011634, HCT-ton 263). */
     private static final String[][] NAVY_COLORS = {

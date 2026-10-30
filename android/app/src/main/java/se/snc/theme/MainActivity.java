@@ -108,6 +108,7 @@ public class MainActivity extends Activity {
         col.addView(rootIntro, lp(dp(8), 0));
         col.addView(button(R.string.btn_root_apply, true, () -> RootTheme.choose(this)), lp(dp(16), dp(52)));
         col.addView(button(R.string.btn_root_restore, false, () -> RootTheme.restore(this)), lp(dp(12), dp(52)));
+        col.addView(button(R.string.btn_diag, false, () -> RootTheme.diagnostics(this)), lp(dp(12), dp(52)));
 
         col.addView(label(R.string.settings_title), lp(dp(36), 0));
         Button lang = button(R.string.btn_language, false, this::chooseLanguage);

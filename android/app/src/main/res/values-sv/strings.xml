@@ -73,4 +73,6 @@
     <string name="root_style_navy">Marinblått och guld (som i skissen)</string>
     <string name="root_style_gold">Guld överallt</string>
     <string name="root_working">Tillämpar färger… det tar ungefär 30 sekunder</string>
+    <string name="btn_diag">Spara diagnostik</string>
+    <string name="diag_done">Diagnostik sparad</string>
 </resources>
