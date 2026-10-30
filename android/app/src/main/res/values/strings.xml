@@ -77,4 +77,8 @@
     <string name="diag_done">Diagnostics saved</string>
     <string name="upd_download_browser">Download latest in browser</string>
     <string name="upd_network_hint">The app cannot reach the internet. Turn it on under Settings → Apps → SNC Theme → Mobile data &amp; Wi‑Fi → Network access.</string>
+    <string name="dialer_title">PHONE KEYPAD (ROOT)</string>
+    <string name="btn_dialer_compact">Compact keypad</string>
+    <string name="btn_dialer_reset">Normal keypad</string>
+    <string name="dialer_result">Active layers: %1$s / %2$d\n\nMake a new call and open the keypad to see the change. Log: Download/snc-knappsats.txt</string>
 </resources>

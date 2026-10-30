@@ -77,4 +77,8 @@
     <string name="diag_done">Diagnostik sparad</string>
     <string name="upd_download_browser">Ladda ner senaste i webbläsaren</string>
     <string name="upd_network_hint">Appen når inte internet. Slå på det under Inställningar → Appar → SNC Tema → Mobildata och wifi → Nätverksåtkomst.</string>
+    <string name="dialer_title">KNAPPSATS (ROOT)</string>
+    <string name="btn_dialer_compact">Kompakt knappsats</string>
+    <string name="btn_dialer_reset">Vanlig knappsats</string>
+    <string name="dialer_result">Aktiva lager: %1$s / %2$d\n\nRing ett nytt samtal och öppna knappsatsen för att se ändringen. Logg: Download/snc-knappsats.txt</string>
 </resources>
