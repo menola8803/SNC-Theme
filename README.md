@@ -4,6 +4,18 @@ Tema för **Scandinavian Nexum Consulting** på OnePlus 13R med LineageOS 23.2.
 
 ![Temaöversikt](skisser/tema-oversikt.png)
 
+## Appen (APK)
+
+Ladda ner senaste `SNC-Tema-*.apk` under [Releases](https://github.com/menola8803/SNC-Theme/releases/latest) och installera den på telefonen (tillåt installation från okända källor).
+
+Appen innehåller:
+
+- **Bakgrunder:** ställer in strandbilden på hemskärmen och logga-bilden på låsskärmen med en knapptryckning.
+- **Skärmsläckaren SNC Klocka:** loggan, klockan i Cinzel med guldkolon, datum och slogan. Aktivera den under Inställningar → Skärm → Skärmsläckare.
+- **Klockwidgeten SNC Klocka:** klockan och datumet i Cinzel med guldkolon samt monogrammet. Håll fingret på hemskärmen → Widgetar → SNC Tema.
+
+APK:n byggs automatiskt av GitHub Actions (`.github/workflows/build-apk.yml`) varje gång något i `android/` ändras, och publiceras som en ny release.
+
 ## Innehåll
 
 | Mapp | Vad |
