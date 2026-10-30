@@ -17,13 +17,13 @@ android {
     }
 
     signingConfigs {
-        // Signeringsnyckel för temat. Den är inte hemlig (repot är publikt);
-        // den finns här så att nya versioner kan installeras ovanpå gamla.
+        // Nyckeln kommer från GitHub-hemligheterna SNC_KEYSTORE_BASE64 och
+        // SNC_KEYSTORE_PASSWORD; arbetsflödet skriver den till release.keystore.
         snc {
-            storeFile file('snc-sign.keystore')
-            storePassword 'sncandroid'
+            storeFile file('release.keystore')
+            storePassword System.getenv('SNC_KEYSTORE_PASSWORD')
             keyAlias 'snc'
-            keyPassword 'sncandroid'
+            keyPassword System.getenv('SNC_KEYSTORE_PASSWORD')
         }
     }
 
