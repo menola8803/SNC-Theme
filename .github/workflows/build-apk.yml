@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "android/**"
+      - "magisk/**"
       - ".github/workflows/build-apk.yml"
   workflow_dispatch:
 
@@ -35,6 +36,10 @@ jobs:
           cp android/app/build/outputs/apk/release/app-release.apk SNC-Tema-v1.0.${{ github.run_number }}.apk
           cp android/app/build/outputs/apk/release/app-release.apk SNC-Tema.apk
 
+      - name: Packa Magisk-modulen
+        run: |
+          (cd magisk && zip -qr "../SNC-Tema-Magisk.zip" .)
+
       - uses: actions/upload-artifact@v4
         with:
           name: SNC-Tema-apk
@@ -47,7 +52,7 @@ jobs:
         run: |
           NOTES="${COMMIT_MSG:-Tema för Scandinavian Nexum Consulting på LineageOS.}"
           gh release create "v1.0.${{ github.run_number }}" \
-            "SNC-Tema-v1.0.${{ github.run_number }}.apk" SNC-Tema.apk \
+            "SNC-Tema-v1.0.${{ github.run_number }}.apk" SNC-Tema.apk SNC-Tema-Magisk.zip \
             --title "SNC Tema v1.0.${{ github.run_number }}" \
             --notes "$NOTES" \
             --latest
