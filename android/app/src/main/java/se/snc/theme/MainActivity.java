@@ -165,10 +165,21 @@ public class MainActivity extends Activity {
     }
 
     private void openStyle() {
-        try {
-            startActivity(new Intent(Intent.ACTION_SET_WALLPAPER));
-        } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Settings.ACTION_DISPLAY_SETTINGS));
+        // Systemets egen sida "Bakgrund och utseende" (WallpaperPicker2), inte Galleri.
+        Intent[] tries = {
+                new Intent(Intent.ACTION_SET_WALLPAPER).setPackage("com.android.wallpaper"),
+                new Intent(Intent.ACTION_MAIN).setComponent(new android.content.ComponentName(
+                        "com.android.wallpaper",
+                        "com.android.customization.picker.CustomizationPickerActivity")),
+                new Intent(Intent.ACTION_SET_WALLPAPER).setPackage("com.android.wallpaperpicker"),
+                new Intent(Settings.ACTION_DISPLAY_SETTINGS)
+        };
+        for (Intent i : tries) {
+            try {
+                startActivity(i);
+                return;
+            } catch (ActivityNotFoundException | SecurityException ignored) {
+            }
         }
     }
 
