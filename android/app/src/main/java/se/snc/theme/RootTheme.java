@@ -136,19 +136,39 @@ public final class RootTheme {
      */
     private static String navySurfaces(Activity a, boolean on) throws Exception {
         StringBuilder sh = new StringBuilder();
+        String log = "/sdcard/Download/snc-farglager.txt";
+        sh.append("exec 3>").append(log).append('\n');
+        sh.append("echo \"== SNC färglager $(date) on=").append(on).append(" ==\" >&3\n");
+        if (on) {
+            // Vänta tills SystemUI har byggt om sina egna färger efter inställningsändringen.
+            sh.append("sleep 8\n");
+        }
         for (String[] c : NAVY_COLORS) {
             String id = "com.android.shell:SncN_" + c[0];
             if (on) {
-                sh.append("cmd overlay fabricate --target android --name SncN_").append(c[0])
+                sh.append("o=$(cmd overlay fabricate --target android --name SncN_").append(c[0])
                   .append(" android:color/").append(c[0]).append(" 0x1c ").append(c[1])
-                  .append(" >/dev/null 2>&1 || echo FAIL_FAB ").append(c[0]).append('\n');
-                sh.append("cmd overlay enable --user 0 ").append(id)
-                  .append(" >/dev/null 2>&1 || echo FAIL_EN ").append(c[0]).append('\n');
-                sh.append("cmd overlay set-priority ").append(id).append(" highest >/dev/null 2>&1\n");
+                  .append(" 2>&1); r=$?; echo \"fab ").append(c[0]).append(" r=$r $o\" >&3; ")
+                  .append("[ $r -eq 0 ] || echo \"FAIL_FAB ").append(c[0]).append(": $o\"\n");
+                sh.append("o=$(cmd overlay enable --user 0 ").append(id)
+                  .append(" 2>&1); r=$?; echo \"en r=$r $o\" >&3; ")
+                  .append("[ $r -eq 0 ] || echo \"FAIL_EN ").append(c[0]).append(": $o\"\n");
             } else {
-                sh.append("cmd overlay disable --user 0 ").append(id).append(" >/dev/null 2>&1\n");
+                sh.append("cmd overlay disable --user 0 ").append(id).append(" >&3 2>&1\n");
             }
         }
+        if (on) {
+            // Lägg lagren överst sist, efter att allt annat är klart.
+            sh.append("sleep 2\n");
+            for (String[] c : NAVY_COLORS) {
+                sh.append("cmd overlay set-priority com.android.shell:SncN_").append(c[0])
+                  .append(" highest >&3 2>&1\n");
+            }
+        }
+        sh.append("echo '== overlay list android ==' >&3\n");
+        sh.append("cmd overlay list android >&3 2>&1\n");
+        sh.append("echo '== dump background ==' >&3\n");
+        sh.append("cmd overlay dump com.android.shell:SncN_system_background_dark >&3 2>&1\n");
         sh.append("echo ACTIVE $(cmd overlay list android | grep -c '\\[x\\] com.android.shell:SncN_')\n");
         java.io.File f = new java.io.File(a.getCacheDir(), "snc_navy.sh");
         try (java.io.FileOutputStream o = new java.io.FileOutputStream(f)) {
@@ -169,6 +189,7 @@ public final class RootTheme {
             }
         }
         if (fails > 3) sum.append("... ").append(fails).append(" errors\n");
+        sum.append("Log: Download/snc-farglager.txt");
         return sum.toString().trim();
     }
 
