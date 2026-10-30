@@ -92,8 +92,8 @@ public class UpdateActivity extends Activity {
         col.addView(text(getString(R.string.upd_history), 13, GOLD, cinzel), lp(dp(32), 0));
         for (Updater.Release r : list) col.addView(card(r), lp(dp(12), 0));
 
-        col.addView(button(getString(R.string.upd_open_github), false, () -> startActivity(
-                new Intent(Intent.ACTION_VIEW, Uri.parse(Updater.releasePage())))), lp(dp(28), dp(52)));
+        col.addView(button(getString(R.string.upd_open_github), false,
+                () -> Updater.openInBrowser(this, Updater.releasePage())), lp(dp(28), dp(52)));
     }
 
     private void showError(String reason) {
@@ -103,8 +103,9 @@ public class UpdateActivity extends Activity {
         col.addView(text(getString(R.string.upd_installed, installedName), 18, WHITE, null), lp(dp(20), 0));
         col.addView(text(getString(R.string.upd_error, reason), 14, MUTED, null), lp(dp(12), 0));
         col.addView(button(getString(R.string.upd_retry), true, this::load), lp(dp(18), dp(52)));
-        col.addView(button(getString(R.string.upd_open_github), false, () -> startActivity(
-                new Intent(Intent.ACTION_VIEW, Uri.parse(Updater.releasePage())))), lp(dp(12), dp(52)));
+        col.addView(button(getString(R.string.upd_download_browser), false,
+                () -> Updater.openInBrowser(this, Updater.LATEST_APK)), lp(dp(12), dp(52)));
+        col.addView(text(getString(R.string.upd_network_hint), 13, MUTED, null), lp(dp(16), 0));
     }
 
     private LinearLayout card(Updater.Release r) {

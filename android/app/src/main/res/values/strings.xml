@@ -75,4 +75,6 @@
     <string name="root_working">Applying colours… this takes about 30 seconds</string>
     <string name="btn_diag">Save diagnostics</string>
     <string name="diag_done">Diagnostics saved</string>
+    <string name="upd_download_browser">Download latest in browser</string>
+    <string name="upd_network_hint">The app cannot reach the internet. Turn it on under Settings → Apps → SNC Theme → Mobile data &amp; Wi‑Fi → Network access.</string>
 </resources>

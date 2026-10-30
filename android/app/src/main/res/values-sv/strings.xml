@@ -75,4 +75,6 @@
     <string name="root_working">Tillämpar färger… det tar ungefär 30 sekunder</string>
     <string name="btn_diag">Spara diagnostik</string>
     <string name="diag_done">Diagnostik sparad</string>
+    <string name="upd_download_browser">Ladda ner senaste i webbläsaren</string>
+    <string name="upd_network_hint">Appen når inte internet. Slå på det under Inställningar → Appar → SNC Tema → Mobildata och wifi → Nätverksåtkomst.</string>
 </resources>

@@ -107,8 +107,7 @@ public final class Updater {
         new AlertDialog.Builder(a)
                 .setTitle(R.string.update_failed_title)
                 .setMessage(a.getString(R.string.update_failed_reason, reason))
-                .setPositiveButton(R.string.update_open_web, (d, w) -> a.startActivity(
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(LATEST_PAGE))))
+                .setPositiveButton(R.string.update_open_web, (d, w) -> openInBrowser(a, LATEST_APK))
                 .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
@@ -173,6 +172,30 @@ public final class Updater {
 
     public static String releasePage() {
         return LATEST_PAGE;
+    }
+
+    /** Fast länk som alltid laddar ner senaste APK:n. */
+    public static final String LATEST_APK =
+            "https://github.com/menola8803/SNC-Theme/releases/latest/download/SNC-Tema.apk";
+
+    /**
+     * Öppnar en länk i webbläsaren, inte i GitHub-appen (som inte kan ladda ner APK-filer).
+     */
+    public static void openInBrowser(Activity a, String url) {
+        Intent view = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        try {
+            android.content.pm.ResolveInfo ri = a.getPackageManager().resolveActivity(
+                    new Intent(Intent.ACTION_VIEW, Uri.parse("http://example.com")),
+                    android.content.pm.PackageManager.MATCH_DEFAULT_ONLY);
+            String pkg = ri != null && ri.activityInfo != null ? ri.activityInfo.packageName : null;
+            if (pkg != null && !"android".equals(pkg)) {
+                view.setPackage(pkg);
+                a.startActivity(view);
+                return;
+            }
+        } catch (Exception ignored) {
+        }
+        a.startActivity(Intent.createChooser(view, url));
     }
 
     /** Hämtar de senaste versionerna, nyast först. */

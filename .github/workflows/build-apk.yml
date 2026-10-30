@@ -31,7 +31,9 @@ jobs:
         run: gradle assembleRelease --no-daemon --stacktrace
 
       - name: Döp om APK
-        run: cp android/app/build/outputs/apk/release/app-release.apk SNC-Tema-v1.0.${{ github.run_number }}.apk
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk SNC-Tema-v1.0.${{ github.run_number }}.apk
+          cp android/app/build/outputs/apk/release/app-release.apk SNC-Tema.apk
 
       - uses: actions/upload-artifact@v4
         with:
@@ -45,7 +47,7 @@ jobs:
         run: |
           NOTES="${COMMIT_MSG:-Tema för Scandinavian Nexum Consulting på LineageOS.}"
           gh release create "v1.0.${{ github.run_number }}" \
-            "SNC-Tema-v1.0.${{ github.run_number }}.apk" \
+            "SNC-Tema-v1.0.${{ github.run_number }}.apk" SNC-Tema.apk \
             --title "SNC Tema v1.0.${{ github.run_number }}" \
             --notes "$NOTES" \
             --latest
