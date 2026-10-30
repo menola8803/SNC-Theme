@@ -6,7 +6,10 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.app.LocaleManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.provider.Settings;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -96,7 +99,23 @@ public class MainActivity extends Activity {
         slogan.setGravity(Gravity.CENTER);
         col.addView(slogan, lp(dp(36), 0));
 
-        col.addView(button(R.string.btn_update, false, () -> Updater.check(this, false)), lp(dp(28), dp(52)));
+        col.addView(label(R.string.root_title), lp(dp(36), 0));
+        TextView rootIntro = new TextView(this);
+        rootIntro.setText(R.string.root_intro);
+        rootIntro.setTextColor(0xFFC9CCD3);
+        rootIntro.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        rootIntro.setLineSpacing(0, 1.2f);
+        col.addView(rootIntro, lp(dp(8), 0));
+        col.addView(button(R.string.btn_root_apply, true, () -> RootTheme.apply(this)), lp(dp(16), dp(52)));
+        col.addView(button(R.string.btn_root_restore, false, () -> RootTheme.restore(this)), lp(dp(12), dp(52)));
+
+        col.addView(label(R.string.settings_title), lp(dp(36), 0));
+        Button lang = button(R.string.btn_language, false, this::chooseLanguage);
+        lang.setText(getString(R.string.btn_language, currentLanguageName()));
+        col.addView(lang, lp(dp(12), dp(52)));
+        col.addView(button(R.string.btn_updates, false,
+                () -> startActivity(new Intent(this, UpdateActivity.class))), lp(dp(12), dp(52)));
+
         TextView version = new TextView(this);
         String vn = "";
         try {
@@ -107,7 +126,7 @@ public class MainActivity extends Activity {
         version.setTextColor(0xFF8F9AAD);
         version.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         version.setGravity(Gravity.CENTER);
-        col.addView(version, lp(dp(10), 0));
+        col.addView(version, lp(dp(14), 0));
 
         setContentView(scroll);
         Updater.check(this, true);
@@ -161,6 +180,29 @@ public class MainActivity extends Activity {
         t.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
         t.setLetterSpacing(0.15f);
         return t;
+    }
+
+    private String currentLanguageName() {
+        if (Build.VERSION.SDK_INT >= 33) {
+            LocaleList l = getSystemService(LocaleManager.class).getApplicationLocales();
+            if (!l.isEmpty()) {
+                return "sv".equals(l.get(0).getLanguage()) ? "Svenska" : "English";
+            }
+        }
+        return getString(R.string.lang_system);
+    }
+
+    private void chooseLanguage() {
+        String[] names = {getString(R.string.lang_system), "Svenska", "English"};
+        new android.app.AlertDialog.Builder(this)
+                .setTitle(R.string.lang_title)
+                .setItems(names, (d, which) -> {
+                    if (Build.VERSION.SDK_INT < 33) return;
+                    LocaleList list = which == 0 ? LocaleList.getEmptyLocaleList()
+                            : LocaleList.forLanguageTags(which == 1 ? "sv" : "en");
+                    getSystemService(LocaleManager.class).setApplicationLocales(list);
+                })
+                .show();
     }
 
     private void openDreamSettings() {

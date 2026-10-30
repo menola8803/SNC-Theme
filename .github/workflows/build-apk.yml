@@ -41,9 +41,11 @@ jobs:
       - name: Publicera release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
         run: |
+          NOTES="${COMMIT_MSG:-Tema för Scandinavian Nexum Consulting på LineageOS.}"
           gh release create "v1.0.${{ github.run_number }}" \
             "SNC-Tema-v1.0.${{ github.run_number }}.apk" \
             --title "SNC Tema v1.0.${{ github.run_number }}" \
-            --notes "Tema för Scandinavian Nexum Consulting på LineageOS (OnePlus 13R). Innehåller bakgrunder för hem- och låsskärm, skärmsläckaren SNC Klocka och klockwidgeten SNC Klocka." \
+            --notes "$NOTES" \
             --latest

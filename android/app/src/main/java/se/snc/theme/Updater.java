@@ -10,7 +10,16 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+
+import android.text.Html;
+import android.util.Xml;
+
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -26,6 +35,10 @@ public final class Updater {
 
     private static final String API =
             "https://api.github.com/repos/menola8803/SNC-Theme/releases/latest";
+    private static final String ATOM =
+            "https://github.com/menola8803/SNC-Theme/releases.atom";
+    private static final String API_LIST =
+            "https://api.github.com/repos/menola8803/SNC-Theme/releases?per_page=15";
     private static final String LATEST_PAGE =
             "https://github.com/menola8803/SNC-Theme/releases/latest";
     private static final String DOWNLOAD =
@@ -42,7 +55,7 @@ public final class Updater {
                 long remote = Long.parseLong(tag.substring(tag.lastIndexOf('.') + 1));
                 long current = a.getPackageManager()
                         .getPackageInfo(a.getPackageName(), 0).getLongVersionCode();
-                final String url = DOWNLOAD + tag + "/SNC-Tema-" + tag + ".apk";
+                final String url = downloadUrl(tag);
                 a.runOnUiThread(() -> {
                     if (a.isFinishing()) return;
                     if (remote > current && url != null) {
@@ -50,6 +63,8 @@ public final class Updater {
                                 .setTitle(R.string.update_title)
                                 .setMessage(a.getString(R.string.update_message, tag))
                                 .setPositiveButton(R.string.update_install, (d, w) -> install(a, url))
+                                .setNeutralButton(R.string.update_show, (d, w) ->
+                                        a.startActivity(new Intent(a, UpdateActivity.class)))
                                 .setNegativeButton(R.string.update_later, null)
                                 .show();
                     } else if (!silent) {
@@ -98,7 +113,7 @@ public final class Updater {
                 .show();
     }
 
-    private static void install(Activity a, String url) {
+    public static void install(Activity a, String url) {
         if (!a.getPackageManager().canRequestPackageInstalls()) {
             toast(a, R.string.update_allow);
             a.startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
@@ -133,6 +148,87 @@ public final class Updater {
                 a.runOnUiThread(() -> failed(a, e));
             }
         }).start();
+    }
+
+
+    /** En publicerad version. */
+    public static final class Release {
+        public String tag;
+        public String date;
+        public String notes;
+        public long code;
+    }
+
+    public static long versionOf(String tag) {
+        try {
+            return Long.parseLong(tag.substring(tag.lastIndexOf('.') + 1));
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    public static String downloadUrl(String tag) {
+        return DOWNLOAD + tag + "/SNC-Tema-" + tag + ".apk";
+    }
+
+    public static String releasePage() {
+        return LATEST_PAGE;
+    }
+
+    /** Hämtar de senaste versionerna, nyast först. */
+    public static List<Release> fetchReleases() throws Exception {
+        try {
+            List<Release> r = fromAtom(readText(ATOM));
+            if (!r.isEmpty()) return r;
+        } catch (Exception ignored) {
+        }
+        List<Release> out = new ArrayList<>();
+        JSONArray arr = new JSONArray(readText(API_LIST));
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject o = arr.getJSONObject(i);
+            Release r = new Release();
+            r.tag = o.getString("tag_name");
+            r.code = versionOf(r.tag);
+            r.date = o.optString("published_at", "");
+            if (r.date.length() >= 10) r.date = r.date.substring(0, 10);
+            r.notes = o.optString("body", "").trim();
+            out.add(r);
+        }
+        return out;
+    }
+
+    private static List<Release> fromAtom(String xml) throws Exception {
+        List<Release> out = new ArrayList<>();
+        XmlPullParser x = Xml.newPullParser();
+        x.setInput(new StringReader(xml));
+        Release cur = null;
+        String tagName = null;
+        for (int ev = x.getEventType(); ev != XmlPullParser.END_DOCUMENT; ev = x.next()) {
+            if (ev == XmlPullParser.START_TAG) {
+                tagName = x.getName();
+                if ("entry".equals(tagName)) cur = new Release();
+                if (cur != null && "link".equals(tagName)) {
+                    String href = x.getAttributeValue(null, "href");
+                    if (href != null && href.contains("/tag/")) {
+                        cur.tag = href.substring(href.lastIndexOf("/tag/") + 5);
+                        cur.code = versionOf(cur.tag);
+                    }
+                }
+            } else if (ev == XmlPullParser.TEXT && cur != null && tagName != null) {
+                String t = x.getText();
+                if ("updated".equals(tagName) && t.length() >= 10) cur.date = t.substring(0, 10);
+                if ("content".equals(tagName)) {
+                    cur.notes = Html.fromHtml(t, Html.FROM_HTML_MODE_COMPACT).toString().trim();
+                }
+            } else if (ev == XmlPullParser.END_TAG) {
+                if ("entry".equals(x.getName()) && cur != null) {
+                    if (cur.tag != null) out.add(cur);
+                    cur = null;
+                }
+                tagName = null;
+            }
+        }
+        return out;
     }
 
     private static HttpURLConnection open(String url) throws Exception {
