@@ -53,7 +53,8 @@ public final class Updater {
                                 .setNegativeButton(R.string.update_later, null)
                                 .show();
                     } else if (!silent) {
-                        toast(a, R.string.update_latest);
+                        Toast.makeText(a, a.getString(R.string.update_latest, "v1.0." + current),
+                                Toast.LENGTH_LONG).show();
                     }
                 });
             } catch (Exception e) {

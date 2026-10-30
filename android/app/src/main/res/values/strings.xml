@@ -31,7 +31,7 @@
     <string name="btn_update">Sök efter uppdatering</string>
     <string name="version_label">Version %1$s</string>
     <string name="update_checking">Söker efter uppdatering…</string>
-    <string name="update_latest">Du har redan senaste versionen</string>
+    <string name="update_latest">Du har senaste versionen (%1$s)</string>
     <string name="update_failed">Uppdateringen misslyckades. Kontrollera internetanslutningen.</string>
     <string name="update_title">Ny version finns</string>
     <string name="update_message">SNC Tema %1$s finns att installera.</string>
