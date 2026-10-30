@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SNC Tema</string>
+    <string name="dream_name">SNC Klocka</string>
+    <string name="widget_name">SNC Klocka</string>
+    <string name="company">Scandinavian Nexum Consulting</string>
+    <string name="slogan">CONNECTING VISION WITH OPPORTUNITY</string>
+    <string name="intro">Tema för LineageOS. Ställ in bakgrunderna, aktivera skärmsläckaren och lägg klockwidgeten på hemskärmen.</string>
+    <string name="btn_both">Ställ in bakgrunder (hem + lås)</string>
+    <string name="btn_home">Endast hemskärm</string>
+    <string name="btn_lock">Endast låsskärm</string>
+    <string name="btn_dream_settings">Välj skärmsläckare</string>
+    <string name="btn_preview">Förhandsgranska skärmsläckaren</string>
+    <string name="widget_hint">Klockwidget: håll fingret på hemskärmen → Widgetar → SNC Tema.</string>
+    <string name="done_both">Bakgrunderna är inställda</string>
+    <string name="done_home">Hemskärmens bakgrund är inställd</string>
+    <string name="done_lock">Låsskärmens bakgrund är inställd</string>
+    <string name="failed">Det gick inte att ställa in bakgrunden</string>
+    <string name="dream_hint">Välj \"SNC Klocka\" i listan</string>
+</resources>

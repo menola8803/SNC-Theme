@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="snc_navy">#FF011634</color>
+    <color name="snc_surface">#FF0C2550</color>
+    <color name="snc_gold">#FFDDAE54</color>
+    <color name="snc_gold_light">#FFE9C27A</color>
+    <color name="snc_white">#FFF5F2EA</color>
+
+    <style name="SncTheme" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">@color/snc_navy</item>
+        <item name="android:colorAccent">@color/snc_gold</item>
+        <item name="android:windowBackground">@color/snc_navy</item>
+        <item name="android:statusBarColor">@color/snc_navy</item>
+        <item name="android:navigationBarColor">@color/snc_navy</item>
+    </style>
+
+    <style name="SncTheme.Fullscreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+</resources>

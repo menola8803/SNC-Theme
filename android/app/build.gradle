@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'se.snc.theme'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'se.snc.theme'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    signingConfigs {
+        // Signeringsnyckel för temat. Den är inte hemlig (repot är publikt);
+        // den finns här så att nya versioner kan installeras ovanpå gamla.
+        snc {
+            storeFile file('snc-sign.keystore')
+            storePassword 'sncandroid'
+            keyAlias 'snc'
+            keyPassword 'sncandroid'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.snc
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
