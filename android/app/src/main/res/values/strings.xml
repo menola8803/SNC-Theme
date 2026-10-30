@@ -16,5 +16,17 @@
     <string name="done_home">Hemskärmens bakgrund är inställd</string>
     <string name="done_lock">Låsskärmens bakgrund är inställd</string>
     <string name="failed">Det gick inte att ställa in bakgrunden</string>
+    <string name="wp_home_name">SNC Hav (guld)</string>
+    <string name="wp_lock_name">SNC Logga (guld)</string>
+    <string name="wp_home_desc">Strandbakgrund som ger telefonen guldfärger</string>
+    <string name="wp_lock_desc">Strandbakgrund med SNC-loggan som ger telefonen guldfärger</string>
+    <string name="gold_title">GULDFÄRGER</string>
+    <string name="gold_intro">Gör klockan, snabbinställningarna och knappar guldtonade. Ställ in båda levande bakgrunderna: först hemskärmen, sedan låsskärmen. Välj sedan Bakgrundsfärger under Bakgrund och stil.</string>
+    <string name="btn_live_home">1. Hemskärm: SNC Hav (guld)</string>
+    <string name="btn_live_lock">2. Låsskärm: SNC Logga (guld)</string>
+    <string name="btn_style">3. Öppna Bakgrund och stil</string>
+    <string name="live_hint_home">Tryck Ställ in bakgrund → Hemskärm</string>
+    <string name="live_hint_lock">Tryck Ställ in bakgrund → Låsskärm</string>
+    <string name="static_title">STILLBILDER</string>
     <string name="dream_hint">Välj \"SNC Klocka\" i listan</string>
 </resources>

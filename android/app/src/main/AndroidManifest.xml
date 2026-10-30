@@ -35,6 +35,32 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".SncWallpaperService$Home"
+            android:exported="true"
+            android:label="@string/wp_home_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper_home" />
+        </service>
+
+        <service
+            android:name=".SncWallpaperService$Lock"
+            android:exported="true"
+            android:label="@string/wp_lock_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper_lock" />
+        </service>
+
         <receiver
             android:name=".ClockWidget"
             android:exported="true"

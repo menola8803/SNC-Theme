@@ -56,8 +56,22 @@ public class MainActivity extends Activity {
         intro.setLineSpacing(0, 1.25f);
         col.addView(intro, lp(dp(28), 0));
 
-        col.addView(button(R.string.btn_both, true,
-                () -> setWallpapers(true, true, R.string.done_both)), lp(dp(28), dp(52)));
+        col.addView(label(R.string.gold_title), lp(dp(32), 0));
+        TextView goldIntro = new TextView(this);
+        goldIntro.setText(R.string.gold_intro);
+        goldIntro.setTextColor(0xFFC9CCD3);
+        goldIntro.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        goldIntro.setLineSpacing(0, 1.2f);
+        col.addView(goldIntro, lp(dp(8), 0));
+        col.addView(button(R.string.btn_live_home, true,
+                () -> openLive(SncWallpaperService.Home.class, R.string.live_hint_home)), lp(dp(16), dp(52)));
+        col.addView(button(R.string.btn_live_lock, true,
+                () -> openLive(SncWallpaperService.Lock.class, R.string.live_hint_lock)), lp(dp(12), dp(52)));
+        col.addView(button(R.string.btn_style, false, this::openStyle), lp(dp(12), dp(52)));
+
+        col.addView(label(R.string.static_title), lp(dp(32), 0));
+        col.addView(button(R.string.btn_both, false,
+                () -> setWallpapers(true, true, R.string.done_both)), lp(dp(12), dp(52)));
         col.addView(button(R.string.btn_home, false,
                 () -> setWallpapers(true, false, R.string.done_home)), lp(dp(12), dp(52)));
         col.addView(button(R.string.btn_lock, false,
@@ -99,6 +113,40 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> Toast.makeText(this,
                     success ? doneMsg : R.string.failed, Toast.LENGTH_SHORT).show());
         }).start();
+    }
+
+    private void openLive(Class<?> service, int hint) {
+        Intent i = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
+        i.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                new android.content.ComponentName(this, service));
+        try {
+            startActivity(i);
+            Toast.makeText(this, hint, Toast.LENGTH_LONG).show();
+        } catch (ActivityNotFoundException e) {
+            try {
+                startActivity(new Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER));
+            } catch (ActivityNotFoundException e2) {
+                Toast.makeText(this, R.string.failed, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void openStyle() {
+        try {
+            startActivity(new Intent(Intent.ACTION_SET_WALLPAPER));
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Settings.ACTION_DISPLAY_SETTINGS));
+        }
+    }
+
+    private TextView label(int text) {
+        TextView t = new TextView(this);
+        t.setText(text);
+        t.setTypeface(cinzel);
+        t.setTextColor(GOLD);
+        t.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        t.setLetterSpacing(0.15f);
+        return t;
     }
 
     private void openDreamSettings() {
