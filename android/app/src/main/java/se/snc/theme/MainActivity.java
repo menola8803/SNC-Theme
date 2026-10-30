@@ -96,7 +96,21 @@ public class MainActivity extends Activity {
         slogan.setGravity(Gravity.CENTER);
         col.addView(slogan, lp(dp(36), 0));
 
+        col.addView(button(R.string.btn_update, false, () -> Updater.check(this, false)), lp(dp(28), dp(52)));
+        TextView version = new TextView(this);
+        String vn = "";
+        try {
+            vn = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (Exception ignored) {
+        }
+        version.setText(getString(R.string.version_label, vn));
+        version.setTextColor(0xFF8F9AAD);
+        version.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        version.setGravity(Gravity.CENTER);
+        col.addView(version, lp(dp(10), 0));
+
         setContentView(scroll);
+        Updater.check(this, true);
     }
 
     private void setWallpapers(boolean home, boolean lock, int doneMsg) {

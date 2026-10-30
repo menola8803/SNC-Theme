@@ -28,5 +28,16 @@
     <string name="live_hint_home">Tryck Ställ in bakgrund → Hemskärm</string>
     <string name="live_hint_lock">Tryck Ställ in bakgrund → Låsskärm</string>
     <string name="static_title">STILLBILDER</string>
+    <string name="btn_update">Sök efter uppdatering</string>
+    <string name="version_label">Version %1$s</string>
+    <string name="update_checking">Söker efter uppdatering…</string>
+    <string name="update_latest">Du har redan senaste versionen</string>
+    <string name="update_failed">Uppdateringen misslyckades. Kontrollera internetanslutningen.</string>
+    <string name="update_title">Ny version finns</string>
+    <string name="update_message">SNC Tema %1$s finns att installera.</string>
+    <string name="update_install">Installera</string>
+    <string name="update_later">Senare</string>
+    <string name="update_allow">Tillåt SNC Tema att installera appar och tryck sedan på knappen igen</string>
+    <string name="update_downloading">Laddar ner uppdateringen…</string>
     <string name="dream_hint">Välj \"SNC Klocka\" i listan</string>
 </resources>
