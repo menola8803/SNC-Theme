@@ -81,4 +81,10 @@
     <string name="btn_dialer_compact">Compact keypad</string>
     <string name="btn_dialer_reset">Normal keypad</string>
     <string name="dialer_result">Active layers: %1$s / %2$d\n\nMake a new call and open the keypad to see the change. Log: Download/snc-knappsats.txt</string>
+    <string name="icons_title">APP ICONS (ROOT)</string>
+    <string name="btn_icons_apply">Apply SNC icons</string>
+    <string name="btn_icons_reset">Original icons</string>
+    <string name="icons_working">Changing icons… the home screen restarts when done</string>
+    <string name="icons_result">Apps changed: %1$d\nActive layers: %2$s\n\nLog: Download/snc-ikoner.txt</string>
+    <string name="icons_reset_done">Original icons restored. Log: Download/snc-ikoner.txt</string>
 </resources>

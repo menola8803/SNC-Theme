@@ -110,6 +110,10 @@ public class MainActivity extends Activity {
         col.addView(button(R.string.btn_root_restore, false, () -> RootTheme.restore(this)), lp(dp(12), dp(52)));
         col.addView(button(R.string.btn_diag, false, () -> RootTheme.diagnostics(this)), lp(dp(12), dp(52)));
 
+        col.addView(label(R.string.icons_title), lp(dp(36), 0));
+        col.addView(button(R.string.btn_icons_apply, true, () -> IconTheme.apply(this, true)), lp(dp(12), dp(52)));
+        col.addView(button(R.string.btn_icons_reset, false, () -> IconTheme.apply(this, false)), lp(dp(12), dp(52)));
+
         col.addView(label(R.string.dialer_title), lp(dp(36), 0));
         col.addView(button(R.string.btn_dialer_compact, true, () -> DialerTweak.apply(this, true)), lp(dp(12), dp(52)));
         col.addView(button(R.string.btn_dialer_reset, false, () -> DialerTweak.apply(this, false)), lp(dp(12), dp(52)));

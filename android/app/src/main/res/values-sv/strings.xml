@@ -81,4 +81,10 @@
     <string name="btn_dialer_compact">Kompakt knappsats</string>
     <string name="btn_dialer_reset">Vanlig knappsats</string>
     <string name="dialer_result">Aktiva lager: %1$s / %2$d\n\nRing ett nytt samtal och öppna knappsatsen för att se ändringen. Logg: Download/snc-knappsats.txt</string>
+    <string name="icons_title">APPIKONER (ROOT)</string>
+    <string name="btn_icons_apply">Tillämpa SNC-ikoner</string>
+    <string name="btn_icons_reset">Ursprungliga ikoner</string>
+    <string name="icons_working">Byter ikoner… hemskärmen startar om när det är klart</string>
+    <string name="icons_result">Appar ändrade: %1$d\nAktiva lager: %2$s\n\nLogg: Download/snc-ikoner.txt</string>
+    <string name="icons_reset_done">Ursprungliga ikoner återställda. Logg: Download/snc-ikoner.txt</string>
 </resources>
