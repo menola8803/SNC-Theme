@@ -106,7 +106,7 @@ public class MainActivity extends Activity {
         rootIntro.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         rootIntro.setLineSpacing(0, 1.2f);
         col.addView(rootIntro, lp(dp(8), 0));
-        col.addView(button(R.string.btn_root_apply, true, () -> RootTheme.apply(this)), lp(dp(16), dp(52)));
+        col.addView(button(R.string.btn_root_apply, true, () -> RootTheme.choose(this)), lp(dp(16), dp(52)));
         col.addView(button(R.string.btn_root_restore, false, () -> RootTheme.restore(this)), lp(dp(12), dp(52)));
 
         col.addView(label(R.string.settings_title), lp(dp(36), 0));

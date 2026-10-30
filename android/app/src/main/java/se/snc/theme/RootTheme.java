@@ -16,10 +16,21 @@ public final class RootTheme {
     private static final String KEY = "theme_customization_overlay_packages";
     private static final String PREFS = "snc_root_theme";
     private static final String GOLD = "DDAE54";
+    private static final String NAVY = "011634";
 
     private RootTheme() {}
 
-    public static void apply(Activity a) {
+    /** Låter användaren välja stil och tillämpar den. */
+    public static void choose(Activity a) {
+        String[] styles = {a.getString(R.string.root_style_navy), a.getString(R.string.root_style_gold)};
+        new AlertDialog.Builder(a)
+                .setTitle(R.string.root_style_title)
+                .setItems(styles, (d, which) -> apply(a, which == 0))
+                .show();
+    }
+
+    /** @param navy marinblå ytor med guldaccenter, annars guld överallt */
+    public static void apply(Activity a, boolean navy) {
         new Thread(() -> {
             String result;
             boolean ok;
@@ -28,9 +39,11 @@ public final class RootTheme {
                 if (!p.contains("original")) {
                     p.edit().putString("original", su("settings get secure " + KEY).trim()).apply();
                 }
-                String json = "{\"android.theme.customization.system_palette\":\"" + GOLD + "\","
+                String neutral = navy ? NAVY : GOLD;
+                String style = navy ? "VIBRANT" : "TONAL_SPOT";
+                String json = "{\"android.theme.customization.system_palette\":\"" + neutral + "\","
                         + "\"android.theme.customization.accent_color\":\"" + GOLD + "\","
-                        + "\"android.theme.customization.theme_style\":\"TONAL_SPOT\","
+                        + "\"android.theme.customization.theme_style\":\"" + style + "\","
                         + "\"android.theme.customization.color_source\":\"preset\","
                         + "\"android.theme.customization.color_both\":\"1\","
                         + "\"android.theme.customization.color_index\":\"-1\","
