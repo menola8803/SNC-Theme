@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -27,6 +26,10 @@ public final class Updater {
 
     private static final String API =
             "https://api.github.com/repos/menola8803/SNC-Theme/releases/latest";
+    private static final String LATEST_PAGE =
+            "https://github.com/menola8803/SNC-Theme/releases/latest";
+    private static final String DOWNLOAD =
+            "https://github.com/menola8803/SNC-Theme/releases/download/";
 
     private Updater() {}
 
@@ -35,21 +38,11 @@ public final class Updater {
         if (!silent) toast(a, R.string.update_checking);
         new Thread(() -> {
             try {
-                JSONObject rel = new JSONObject(readText(API));
-                String tag = rel.getString("tag_name");
+                String tag = latestTag();
                 long remote = Long.parseLong(tag.substring(tag.lastIndexOf('.') + 1));
                 long current = a.getPackageManager()
                         .getPackageInfo(a.getPackageName(), 0).getLongVersionCode();
-                String apkUrl = null;
-                JSONArray assets = rel.getJSONArray("assets");
-                for (int i = 0; i < assets.length(); i++) {
-                    JSONObject as = assets.getJSONObject(i);
-                    if (as.getString("name").endsWith(".apk")) {
-                        apkUrl = as.getString("browser_download_url");
-                        break;
-                    }
-                }
-                final String url = apkUrl;
+                final String url = DOWNLOAD + tag + "/SNC-Tema-" + tag + ".apk";
                 a.runOnUiThread(() -> {
                     if (a.isFinishing()) return;
                     if (remote > current && url != null) {
@@ -64,9 +57,44 @@ public final class Updater {
                     }
                 });
             } catch (Exception e) {
-                if (!silent) a.runOnUiThread(() -> toast(a, R.string.update_failed));
+                if (!silent) a.runOnUiThread(() -> failed(a, e));
             }
         }).start();
+    }
+
+    /**
+     * Läser senaste versionens tagg från webbsidans omdirigering
+     * (/releases/latest → /releases/tag/v1.0.N). Den har ingen frågegräns,
+     * till skillnad från GitHubs API. API:t används bara som reserv.
+     */
+    private static String latestTag() throws Exception {
+        try {
+            HttpURLConnection c = open(LATEST_PAGE);
+            c.setInstanceFollowRedirects(false);
+            c.setRequestMethod("HEAD");
+            int code = c.getResponseCode();
+            String loc = c.getHeaderField("Location");
+            c.disconnect();
+            if (code >= 300 && code < 400 && loc != null && loc.contains("/tag/")) {
+                return loc.substring(loc.lastIndexOf("/tag/") + 5);
+            }
+        } catch (Exception ignored) {
+        }
+        return new JSONObject(readText(API)).getString("tag_name");
+    }
+
+    /** Visar orsaken och erbjuder att öppna releasesidan i webbläsaren. */
+    private static void failed(Activity a, Exception e) {
+        if (a.isFinishing()) return;
+        String reason = e.getClass().getSimpleName()
+                + (e.getMessage() != null ? ": " + e.getMessage() : "");
+        new AlertDialog.Builder(a)
+                .setTitle(R.string.update_failed_title)
+                .setMessage(a.getString(R.string.update_failed_reason, reason))
+                .setPositiveButton(R.string.update_open_web, (d, w) -> a.startActivity(
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(LATEST_PAGE))))
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
     private static void install(Activity a, String url) {
@@ -101,7 +129,7 @@ public final class Updater {
                     s.commit(p.getIntentSender());
                 }
             } catch (Exception e) {
-                a.runOnUiThread(() -> toast(a, R.string.update_failed));
+                a.runOnUiThread(() -> failed(a, e));
             }
         }).start();
     }

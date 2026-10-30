@@ -38,6 +38,9 @@
     <string name="update_install">Installera</string>
     <string name="update_later">Senare</string>
     <string name="update_allow">Tillåt SNC Tema att installera appar och tryck sedan på knappen igen</string>
+    <string name="update_failed_title">Kunde inte uppdatera</string>
+    <string name="update_failed_reason">Orsak: %1$s\n\nDu kan ladda ner senaste versionen från webbsidan i stället.</string>
+    <string name="update_open_web">Öppna webbsidan</string>
     <string name="update_downloading">Laddar ner uppdateringen…</string>
     <string name="dream_hint">Välj \"SNC Klocka\" i listan</string>
 </resources>
