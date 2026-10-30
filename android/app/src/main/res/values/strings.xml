@@ -70,7 +70,7 @@
     <string name="root_restored">Colours restored</string>
     <string name="root_detail">The phone now reports:\n\n%1$s</string>
     <string name="root_style_title">Choose style</string>
-    <string name="root_style_navy">Navy and gold (as in the design)</string>
+    <string name="root_style_navy">Navy layers (experimental)</string>
     <string name="root_style_gold">Gold all over</string>
     <string name="root_working">Applying colours… this takes about 30 seconds</string>
     <string name="btn_diag">Save diagnostics</string>
@@ -87,4 +87,5 @@
     <string name="icons_working">Changing icons… the home screen restarts when done</string>
     <string name="icons_result">Apps changed: %1$d\nActive layers: %2$s\n\nLog: Download/snc-ikoner.txt</string>
     <string name="icons_reset_done">Original icons restored. Log: Download/snc-ikoner.txt</string>
+    <string name="root_style_black">Black and gold (recommended)</string>
 </resources>

@@ -70,7 +70,7 @@
     <string name="root_restored">Färgerna är återställda</string>
     <string name="root_detail">Telefonen svarar nu:\n\n%1$s</string>
     <string name="root_style_title">Välj stil</string>
-    <string name="root_style_navy">Marinblått och guld (som i skissen)</string>
+    <string name="root_style_navy">Marinblå lager (experiment)</string>
     <string name="root_style_gold">Guld överallt</string>
     <string name="root_working">Tillämpar färger… det tar ungefär 30 sekunder</string>
     <string name="btn_diag">Spara diagnostik</string>
@@ -87,4 +87,5 @@
     <string name="icons_working">Byter ikoner… hemskärmen startar om när det är klart</string>
     <string name="icons_result">Appar ändrade: %1$d\nAktiva lager: %2$s\n\nLogg: Download/snc-ikoner.txt</string>
     <string name="icons_reset_done">Ursprungliga ikoner återställda. Logg: Download/snc-ikoner.txt</string>
+    <string name="root_style_black">Svart och guld (rekommenderas)</string>
 </resources>

@@ -22,15 +22,21 @@ public final class RootTheme {
 
     /** Låter användaren välja stil och tillämpar den. */
     public static void choose(Activity a) {
-        String[] styles = {a.getString(R.string.root_style_navy), a.getString(R.string.root_style_gold)};
+        String[] styles = {a.getString(R.string.root_style_black),
+                a.getString(R.string.root_style_gold), a.getString(R.string.root_style_navy)};
         new AlertDialog.Builder(a)
                 .setTitle(R.string.root_style_title)
-                .setItems(styles, (d, which) -> apply(a, which == 0))
+                .setItems(styles, (d, which) -> apply(a, which))
                 .show();
     }
 
-    /** @param navy marinblå ytor med guldaccenter, annars guld överallt */
-    public static void apply(Activity a, boolean navy) {
+    /**
+     * @param mode 0 = svart och guld (RAINBOW: neutrala ytor utan färgton, guldaccenter),
+     *             1 = guld överallt (TONAL_SPOT), 2 = marinblå lager (experimentellt)
+     */
+    public static void apply(Activity a, int mode) {
+        final boolean navy = mode == 2;
+        final String style = mode == 0 ? "RAINBOW" : "TONAL_SPOT";
         android.widget.Toast.makeText(a, R.string.root_working, android.widget.Toast.LENGTH_LONG).show();
         new Thread(() -> {
             String result;
@@ -43,7 +49,6 @@ public final class RootTheme {
                 // Android 13+ använder en enda grundfärg för hela paletten, så
                 // grundfärgen är alltid guld. Marinblå ytor läggs som ett eget lager.
                 String neutral = GOLD;
-                String style = "TONAL_SPOT";
                 String json = "{\"android.theme.customization.system_palette\":\"" + neutral + "\","
                         + "\"android.theme.customization.accent_color\":\"" + GOLD + "\","
                         + "\"android.theme.customization.theme_style\":\"" + style + "\","
